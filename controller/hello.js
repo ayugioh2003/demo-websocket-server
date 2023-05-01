@@ -1,5 +1,5 @@
 const sayHello = (req, res) => {
-  return res.send('hello hexSchool')
+  return res.json('hello hexSchool')
 }
 
 module.exports = {
