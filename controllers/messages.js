@@ -1,4 +1,4 @@
-const Message = require('../model/message')
+const Message = require('../models/message')
 
 /**
  * 取得聊天訊息
