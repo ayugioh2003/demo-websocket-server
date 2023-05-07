@@ -1,6 +1,8 @@
 const socketIO = require('socket.io')
 const dayjs = require('dayjs')
 
+const Message = require('../models/message')
+
 function connectSocketIO(server) {
   const io = new socketIO.Server(server)
 
@@ -21,12 +23,23 @@ function connectSocketIO(server) {
     })
 
     // 2. 發送聊天訊息給其他人
-    socket.on('chatMessage', (messagePayload) => {
+    socket.on('chatMessage', async (messagePayload) => {
+      const { user, content } = messagePayload
       console.log('messagePayload', messagePayload)
-      io.emit('chatMessage', {
-        ...messagePayload,
-        dateTime: dayjs().format('YYYY-MM-DDTHH:mm:ssZ'),
-      })
+      // 3. 儲存訊息
+      try {
+        const message = await Message.create({
+          user,
+          content,
+        })
+        console.log('message', message)
+        io.emit('chatMessage', {
+          ...messagePayload,
+          createAt: dayjs().format('YYYY-MM-DDTHH:mm:ssZ'),
+        })
+      } catch (error) {
+        console.error(error)
+      }
     })
   })
 }
