@@ -35,11 +35,38 @@ function connectSocketIO(server) {
         console.log('message', message)
         io.emit('chatMessage', {
           ...messagePayload,
-          createAt: dayjs().format('YYYY-MM-DDTHH:mm:ssZ'),
+          // createAt: dayjs().format('YYYY-MM-DDTHH:mm:ssZ'),
         })
       } catch (error) {
         console.error(error)
       }
+    })
+
+    // 4. 開房間
+    socket.on('joinRoom', function (chatroom) {
+      socket.join(chatroom)
+    })
+
+    socket.on('roomMessage', async (messagePayload) => {
+      const { user, content, chatroom } = messagePayload
+      console.log('messagePayload', messagePayload)
+      try {
+        const message = await Message.create({
+          user,
+          content,
+          chatroom,
+        })
+        console.log('message', message)
+        io.to(chatroom).emit('roomMessage', {
+          ...messagePayload,
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    })
+
+    socket.on('leaveRoom', function (chatroom) {
+      socket.leave(chatroom)
     })
   })
 }
