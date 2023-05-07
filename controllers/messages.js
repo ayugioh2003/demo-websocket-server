@@ -1,4 +1,4 @@
-const Message = require('../models/message')
+const MessagesService = require('../services/messages')
 
 /**
  * 取得聊天訊息
@@ -11,7 +11,7 @@ const getMessages = async (req, res) => {
   }
 
   try {
-    const messages = await Message.find(query).exec()
+    const messages = await MessagesService.getMessages(query)
     return res.json({ data: messages })
   } catch (error) {
     res.status(400)
@@ -35,7 +35,7 @@ const createMessages = async (req, res) => {
   }
 
   try {
-    const newMessage = await Message.create({
+    const newMessage = await MessagesService.createMessage({
       user,
       content,
       chatroom,
