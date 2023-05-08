@@ -12,9 +12,5 @@ server.listen(PORT, () => {
 })
 
 // DATABASE
-const connectDB = require('./application/db.js')
-connectDB()
 
 // Socket.io
-const connectSocketIO = require('./application/socket-io')
-connectSocketIO(server)

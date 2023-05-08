@@ -1,5 +1,8 @@
-const sayHello = (req, res) => {
-  return res.json('hello hexSchool')
+const helloService = require('../services/hello')
+
+const sayHello = async (req, res) => {
+  const helloMessage = await helloService.getHelloMessage()
+  return res.json(helloMessage)
 }
 
 module.exports = {
